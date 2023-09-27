@@ -7,7 +7,6 @@ type User = {
   id?: string;
   name: string;
   email: string;
-  phone: number;
   password: string;
 };
 
@@ -45,7 +44,6 @@ export default function Home() {
           mutation.mutate({
             name: "joe",
             email: "jo@gmail.com",
-            phone: 9074955635,
             password: "joppan",
           });
         }}

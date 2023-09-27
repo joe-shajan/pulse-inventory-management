@@ -41,3 +41,7 @@ pisma commands
 ```
 npx prisma db push
 ```
+
+```
+npx prisma migrate dev
+```
