@@ -7,7 +7,6 @@ export async function GET(request: Request) {
     console.log("in route");
 
     const users = await prisma.user.findMany();
-    console.log(users);
 
     return NextResponse.json(users);
   } catch (error: any) {

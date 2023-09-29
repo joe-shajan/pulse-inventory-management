@@ -1,55 +1,65 @@
-"use client";
+"use server";
 
-import axios from "axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import prisma from "@/utils/prisma";
+import { User } from "@/types";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import LogoutButton from "./components/LogoutButton";
 
-type User = {
-  id?: string;
-  name: string;
-  email: string;
-  password: string;
-};
+export default async function Home() {
+  // async function getUsers() {
+  //   return (await axios.get("/api/user").then((data) => data.data)) as User[];
+  // }
 
-async function getUsers() {
-  return (await axios.get("/api/user").then((data) => data.data)) as User[];
-}
+  // const { data: users } = useQuery<User[]>({
+  //   queryKey: ["stream-hydrate-users"],
+  //   queryFn: () => getUsers(),
+  //   // suspense: true,
+  //   // staleTime: 5 * 1000,
+  // });
 
-export default function Home() {
-  const { data: users } = useQuery<User[]>({
-    queryKey: ["stream-hydrate-users"],
-    queryFn: () => getUsers(),
-    // suspense: true,
-    // staleTime: 5 * 1000,
-  });
+  // const mutation = useMutation({
+  //   mutationFn: (user: User) => {
+  //     return axios.post("/api/user", user);
+  //   },
+  // });
 
-  console.log(users);
+  const getCurrentUser = async () => {
+    try {
+      const session = await getServerSession(authOptions);
+      if (!session?.user?.email) return;
+      const currentUser = await prisma.user.findUnique({
+        where: { email: session.user.email },
+      });
+      console.log(currentUser);
 
-  const mutation = useMutation({
-    mutationFn: (user: User) => {
-      return axios.post("/api/user", user);
-    },
-  });
+      if (!currentUser) return;
+
+      return currentUser;
+    } catch (e: any) {
+      console.log(e);
+      // simply ignores if no user is logged in
+      return;
+    }
+  };
+
+  const user = await getCurrentUser();
+
+  if (!user)
+    return (
+      <>
+        <h3>You are currently not logged in!</h3>
+        <Link href="/auth/login">Login to my account</Link>
+      </>
+    );
 
   return (
-    <div className="p-6">
-      {users?.map((user) => (
-        <div key={user.id} className="my-4">
-          <p className="text-xl">id: {user.id}</p>
-          <p className="text-xl">name: {user.name}</p>
-        </div>
-      ))}
-      <button
-        className="p-4 bg-black text-white rounded-xl m-4"
-        onClick={() => {
-          mutation.mutate({
-            name: "joe",
-            email: "jo@gmail.com",
-            password: "joppan",
-          });
-        }}
-      >
-        add user
-      </button>
-    </div>
+    <>
+      <div className="ps-6 pt-6">name: {user?.name}</div>
+      <div className="ps-6">email: {user?.email}</div>
+      <LogoutButton />
+    </>
   );
 }
