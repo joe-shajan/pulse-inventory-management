@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import { Button } from "@/components";
 
 const validationSchema = z
   .object({
@@ -173,12 +174,9 @@ const Form = () => {
       </div>
 
       <div className="mb-6 text-center">
-        <button
-          className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
+        <Button className="w-full " type="submit">
           Register Account
-        </button>
+        </Button>
       </div>
       <hr className="mb-6 border-t" />
 
