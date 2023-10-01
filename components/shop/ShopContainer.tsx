@@ -1,12 +1,20 @@
+"use client";
+
 import React from "react";
 import { Button } from "../Button";
 import ShopCard from "./ShopCard";
+import Modal from "../Modal";
+import useModal from "@/hooks/useModal";
 
 export const ShopContainer = () => {
+  const { isOpen, toggle } = useModal();
   return (
     <>
+      <Modal isOpen={isOpen} toggle={toggle}>
+        <div></div>
+      </Modal>
       <div className="flex justify-end px-4 md:px-12 lg:px-28 mt-6">
-        <Button>Create New Shop</Button>
+        <Button onClick={toggle}>Create New Shop</Button>
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
         <div className="flex flex-wrap -mx-1 lg:-mx-4">
