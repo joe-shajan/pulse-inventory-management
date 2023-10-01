@@ -4,13 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    console.log("in route");
-
     const users = await prisma.user.findMany();
 
     return NextResponse.json(users);
   } catch (error: any) {
-    console.log("error");
     console.log(error);
 
     return NextResponse.json(
@@ -26,7 +23,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    console.log(data);
+
     const user = await prisma.user.create({ data });
     console.log(user);
 

@@ -4,8 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import prisma from "@/utils/prisma";
 import Header from "@/components/Header";
-import Image from "next/image";
-import { Button, ShopContainer } from "@/components";
+import { ShopContainer } from "@/components";
 
 export default async function Home() {
   // async function getUsers() {
@@ -32,7 +31,6 @@ export default async function Home() {
       const currentUser = await prisma.user.findUnique({
         where: { email: session.user.email },
       });
-      console.log(currentUser);
 
       if (!currentUser) return;
 

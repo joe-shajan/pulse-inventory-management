@@ -24,7 +24,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       let user = await signIn("credentials", loginData);
-      console.log(user);
+
       setAlert({ status: "success", message: "Login successfully" });
       setLoginData({ email: "", password: "" });
       //   redirect("/");
@@ -74,7 +74,7 @@ const LoginPage = () => {
       </form>
       <div>
         Do not have an account?
-        <Link href="/auth/register">Create an account</Link>
+        <Link href="/auth/signup">Create an account</Link>
       </div>
     </div>
   );
