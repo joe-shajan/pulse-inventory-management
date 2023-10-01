@@ -1,6 +1,8 @@
 "use client";
+import { Button } from "@/components";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 const LoginPage = () => {
@@ -23,9 +25,9 @@ const LoginPage = () => {
     try {
       let user = await signIn("credentials", loginData);
       console.log(user);
-
       setAlert({ status: "success", message: "Login successfully" });
       setLoginData({ email: "", password: "" });
+      //   redirect("/");
     } catch (error: any) {
       console.log({ error });
       setAlert({ status: "error", message: "Something went wrong" });
@@ -68,9 +70,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button className="bg-black text-white p-2 rounded-lg" type="submit">
-          Login
-        </button>
+        <Button type="submit">Login</Button>
       </form>
       <div>
         Do not have an account?
