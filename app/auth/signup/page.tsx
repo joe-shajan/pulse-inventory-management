@@ -14,7 +14,7 @@ import { Button } from "@/components";
 const validationSchema = z
   .object({
     name: z.string().min(1, { message: "name is required" }),
-    phone: z.string().regex(phoneRegex, "Invalid Number!"),
+    phoneNumber: z.string().regex(phoneRegex, "Invalid Number!"),
     email: z.string().min(1, { message: "Email is required" }).email({
       message: "Must be a valid email",
     }),
@@ -86,22 +86,22 @@ const Form = () => {
         <div className="md:ml-2">
           <label
             className="block mb-2 text-sm font-bold text-gray-700"
-            htmlFor="phone"
+            htmlFor="phoneNumber"
           >
             Phone
           </label>
           <input
             className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
-              errors.phone && "border-red-500"
+              errors.phoneNumber && "border-red-500"
             } rounded appearance-none focus:outline-none focus:shadow-outline`}
-            id="phone"
+            id="phoneNumber"
             type="text"
             placeholder="9074758634"
-            {...register("phone")}
+            {...register("phoneNumber")}
           />
-          {errors.phone && (
+          {errors.phoneNumber && (
             <p className="text-xs italic text-red-500 mt-2">
-              {errors.phone?.message}
+              {errors.phoneNumber?.message}
             </p>
           )}
         </div>

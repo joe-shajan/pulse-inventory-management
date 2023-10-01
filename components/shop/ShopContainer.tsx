@@ -5,13 +5,15 @@ import { Button } from "../Button";
 import ShopCard from "./ShopCard";
 import Modal from "../Modal";
 import useModal from "@/hooks/useModal";
+import { CreateShop } from "./CreateShop";
 
 export const ShopContainer = () => {
   const { isOpen, toggle } = useModal();
+
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
-        <div></div>
+        <CreateShop toggle={toggle} />
       </Modal>
       <div className="flex justify-end px-4 md:px-12 lg:px-28 mt-6">
         <Button onClick={toggle}>Create New Shop</Button>

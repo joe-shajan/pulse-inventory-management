@@ -36,12 +36,18 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
-pisma commands
+steps after updating prisma schema
+
+```
+npx prisma migrate dev
+```
+
+```
+npx prisma migrate dev --name newtables
+```
 
 ```
 npx prisma db push
 ```
 
-```
-npx prisma migrate dev
-```
+

@@ -6,9 +6,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     console.log(body);
 
-    const { name, email, phone, password } = body;
+    const { name, email, phoneNumber, password } = body;
     const user = await prisma.user.create({
-      data: { email, name, phone, password }, // TODO: password needs to be hashed
+      data: { email, name, phoneNumber, password }, // TODO: password needs to be hashed
     });
     return NextResponse.json(user);
   } catch (error: any) {
