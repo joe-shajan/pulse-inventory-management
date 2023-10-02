@@ -33,7 +33,7 @@ const Form = () => {
 
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
-      return signIn("credentials", data);
+      return signIn("credentials", { redirect: false, ...data });
     },
     onSuccess: () => {
       toast.success("login successfull");
