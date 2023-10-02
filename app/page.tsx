@@ -1,9 +1,3 @@
-"use server";
-
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import prisma from "@/utils/prisma";
-import Header from "@/components/Header";
 import { ShopContainer } from "@/components/shop/ShopContainer";
 
 export default async function Home() {
@@ -24,29 +18,8 @@ export default async function Home() {
   //   },
   // });
 
-  const getCurrentUser = async () => {
-    try {
-      const session = await getServerSession(authOptions);
-      if (!session?.user?.email) return;
-      const currentUser = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-
-      if (!currentUser) return;
-
-      return currentUser;
-    } catch (e: any) {
-      console.log(e);
-      // simply ignores if no user is logged in
-      return;
-    }
-  };
-
-  const user = await getCurrentUser();
-
   return (
     <>
-      <Header user={user} />
       <ShopContainer />
     </>
   );

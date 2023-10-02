@@ -5,16 +5,26 @@ import { Button } from "./Button";
 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 type Props = { user: User };
 
 const Header = ({ user }: Props) => {
+  const pathname = usePathname();
+  console.log(pathname);
+  const isSignupOrLogin =
+    pathname === "/auth/login" || pathname === "/auth/signup";
+
   return (
     <div className="h-16 bg-slate-100 w-full flex justify-around items-center">
       <div>
-        <h1 className="text-lg font-semibold">Inventory management</h1>
+        <Link href="/">
+          <h1 className="text-lg font-semibold">Inventory management</h1>
+        </Link>
       </div>
-      {user ? (
+      {isSignupOrLogin ? (
+        <div></div>
+      ) : user ? (
         <>
           <div>{user?.name}</div>
           <Button onClick={() => signOut()}>Log out</Button>
