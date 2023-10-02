@@ -10,7 +10,6 @@ import Link from "next/link";
 export default function Page({ params }: any) {
   const { id } = params;
   const { isOpen, toggle } = useModal();
-  console.log(id);
 
   return (
     <>
@@ -18,7 +17,7 @@ export default function Page({ params }: any) {
         <CreateProduct toggle={toggle} />
       </Modal>
       <div className="flex gap-3 justify-end px-4 md:px-12 lg:px-28 mt-6 mb-2">
-        <Link href={`/shop/${id}/users`}>
+        <Link href={`/shop/${id}/team`}>
           <Button className="bg-slate-200 text-black hover:bg-slate-300">
             Manage users
           </Button>

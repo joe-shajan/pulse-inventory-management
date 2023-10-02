@@ -11,7 +11,7 @@ type Props = { user: User | undefined };
 
 const Header = ({ user }: Props) => {
   const pathname = usePathname();
-  console.log(pathname);
+
   const isSignupOrLogin =
     pathname === "/auth/login" || pathname === "/auth/signup";
 

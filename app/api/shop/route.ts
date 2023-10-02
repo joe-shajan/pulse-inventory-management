@@ -5,10 +5,8 @@ import { getCurrentUser } from "@/utils";
 export async function POST(request: Request) {
   try {
     const shopData = await request.json();
-    console.log(shopData);
 
     const user = await getCurrentUser();
-    console.log(user);
 
     if (!user) throw new Error("user not found");
 
@@ -48,7 +46,6 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const user = await getCurrentUser();
-    console.log(user);
 
     if (!user) throw new Error("User not found");
 

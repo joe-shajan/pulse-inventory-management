@@ -25,7 +25,6 @@ export async function POST(request: Request) {
     const data = await request.json();
 
     const user = await prisma.user.create({ data });
-    console.log(user);
 
     return NextResponse.json(user);
   } catch (error: any) {
