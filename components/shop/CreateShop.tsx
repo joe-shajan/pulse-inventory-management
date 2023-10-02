@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 
@@ -21,9 +20,10 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 
 type CreateShopFormProps = {
   toggle: () => void;
+  refetch: () => void;
 };
 
-export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
+export const CreateShopForm = ({ toggle, refetch }: CreateShopFormProps) => {
   const {
     register,
     handleSubmit,
@@ -39,6 +39,7 @@ export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
     },
     onSuccess: (data) => {
       toast.success("Shop created successfully");
+      refetch();
       toggle();
     },
     onError: (error) => {
@@ -166,7 +167,7 @@ export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
       </div>
       <div className="text-center">
         <Button className="w-full " type="submit">
-          Create New Shop
+          {mutation.isLoading ? "Creating Shop..." : "Create New Shop"}
         </Button>
       </div>
     </form>
@@ -175,9 +176,10 @@ export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
 
 type CreateShopProps = {
   toggle: () => void;
+  refetch: () => void;
 };
 
-export const CreateShop = ({ toggle }: CreateShopProps) => {
+export const CreateShop = ({ toggle, refetch }: CreateShopProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -191,7 +193,7 @@ export const CreateShop = ({ toggle }: CreateShopProps) => {
               X
             </div>
           </div>
-          <CreateShopForm toggle={toggle} />
+          <CreateShopForm toggle={toggle} refetch={refetch} />
         </div>
       </div>
       <Toaster />

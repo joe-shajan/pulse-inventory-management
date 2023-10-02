@@ -42,3 +42,33 @@ export async function POST(request: Request) {
     );
   }
 }
+
+// Import necessary modules and initialize Prisma
+
+export async function GET(request: Request) {
+  try {
+    const user = await getCurrentUser();
+    console.log(user);
+
+    if (!user) throw new Error("User not found");
+
+    // Use Prisma to query shops associated with the user
+    const shops = await prisma.shop.findMany({
+      where: {
+        ownerId: user.id,
+      },
+    });
+
+    return NextResponse.json({ shops });
+  } catch (error: any) {
+    console.log(error);
+
+    return NextResponse.json(
+      {
+        error: error.message,
+        errorCode: error.code,
+      },
+      { status: 500 }
+    );
+  }
+}

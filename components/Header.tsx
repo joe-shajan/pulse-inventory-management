@@ -7,7 +7,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-type Props = { user: User };
+type Props = { user: User | undefined };
 
 const Header = ({ user }: Props) => {
   const pathname = usePathname();

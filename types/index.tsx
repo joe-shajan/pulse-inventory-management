@@ -1,8 +1,3 @@
-export type User =
-  | {
-      id: string;
-      name: string | null;
-      email: string;
-      password: string;
-    }
-  | undefined;
+import type { Shop, User } from "@prisma/client";
+
+export { Shop, User };
