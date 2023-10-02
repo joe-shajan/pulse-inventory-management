@@ -18,7 +18,7 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export const CreateUserForm = () => {
+export const AddTeamMemberForm = () => {
   const {
     register,
     handleSubmit,
@@ -99,11 +99,11 @@ export const CreateUserForm = () => {
   );
 };
 
-type CreateUserProps = {
+type AddTeamMemberProps = {
   toggle: () => void;
 };
 
-export const CreateUser = ({ toggle }: CreateUserProps) => {
+export const AddTeamMember = ({ toggle }: AddTeamMemberProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -117,7 +117,7 @@ export const CreateUser = ({ toggle }: CreateUserProps) => {
               X
             </div>
           </div>
-          <CreateUserForm />
+          <AddTeamMemberForm />
         </div>
       </div>
       <Toaster />
