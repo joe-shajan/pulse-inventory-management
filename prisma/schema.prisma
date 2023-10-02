@@ -26,8 +26,8 @@ model Shop {
   name      String
   bio       String
   address   String
-  latitude  Float
-  longitude Float
+  latitude  String
+  longitude String
   ownerId   String
   owner     User         @relation(fields: [ownerId], references: [id])
   products  Product[]

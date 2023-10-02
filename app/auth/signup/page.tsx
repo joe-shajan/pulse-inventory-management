@@ -48,7 +48,6 @@ const Form = () => {
     },
     onSuccess: () => {
       toast.success("Signup successfull");
-      redirect("/");
     },
     onError: () => {
       toast.error("Signup failed");

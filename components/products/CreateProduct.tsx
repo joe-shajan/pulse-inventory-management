@@ -35,7 +35,6 @@ export const CreateProductForm = () => {
     },
     onSuccess: () => {
       toast.success("Signup successfull");
-      redirect("/");
     },
     onError: () => {
       toast.error("Signup failed");

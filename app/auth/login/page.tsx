@@ -37,7 +37,6 @@ const Form = () => {
     },
     onSuccess: () => {
       toast.success("login successfull");
-      redirect("/");
     },
     onError: () => {
       toast.error("login failed");

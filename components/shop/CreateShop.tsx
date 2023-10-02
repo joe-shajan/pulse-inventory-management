@@ -10,8 +10,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 
 const validationSchema = z.object({
-  shopname: z.string().min(1, { message: "name is required" }),
-  shopbio: z.string().min(1, { message: "shopbio is required" }),
+  name: z.string().min(1, { message: "name is required" }),
+  bio: z.string().min(1, { message: "shopbio is required" }),
   address: z.string().min(1, { message: "address is required" }),
   latitude: z.string().min(1, { message: "latitude is required" }),
   longitude: z.string().min(1, { message: "longitude is required" }),
@@ -19,7 +19,11 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export const CreateShopForm = () => {
+type CreateShopFormProps = {
+  toggle: () => void;
+};
+
+export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
   const {
     register,
     handleSubmit,
@@ -31,14 +35,14 @@ export const CreateShopForm = () => {
 
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
-      return axios.post("/api/auth/signup", data);
+      return axios.post("/api/shop", data);
     },
-    onSuccess: () => {
-      toast.success("Signup successfull");
-      redirect("/");
+    onSuccess: (data) => {
+      toast.success("Shop created successfully");
+      toggle();
     },
-    onError: () => {
-      toast.error("Signup failed");
+    onError: (error) => {
+      toast.error("Shop creation failed");
     },
   });
 
@@ -50,44 +54,44 @@ export const CreateShopForm = () => {
       <div className="mb-4 md:mr-2">
         <label
           className="block mb-2 text-sm font-bold text-gray-700"
-          htmlFor="shopname"
+          htmlFor="name"
         >
           Shop Name
         </label>
         <input
           className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
-            errors.shopname && "border-red-500"
+            errors.name && "border-red-500"
           } rounded appearance-none focus:outline-none focus:shadow-outline`}
-          id="shopname"
+          id="name"
           type="text"
           placeholder="Shop Name"
-          {...register("shopname")}
+          {...register("name")}
         />
-        {errors.shopname && (
+        {errors.name && (
           <p className="text-xs italic text-red-500 mt-2">
-            {errors.shopname?.message}
+            {errors.name?.message}
           </p>
         )}
       </div>
       <div className="mb-4">
         <label
           className="block mb-2 text-sm font-bold text-gray-700"
-          htmlFor="shopbio"
+          htmlFor="bio"
         >
           Shop Bio
         </label>
         <input
           className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
-            errors.shopbio && "border-red-500"
+            errors.bio && "border-red-500"
           } rounded appearance-none focus:outline-none focus:shadow-outline`}
-          id="shopbio"
+          id="bio"
           type="text"
           placeholder="shop bio"
-          {...register("shopbio")}
+          {...register("bio")}
         />
-        {errors.shopbio && (
+        {errors.bio && (
           <p className="text-xs italic text-red-500 mt-2">
-            {errors.shopbio?.message}
+            {errors.bio?.message}
           </p>
         )}
       </div>
@@ -104,7 +108,7 @@ export const CreateShopForm = () => {
             errors.address && "border-red-500"
           } rounded appearance-none focus:outline-none focus:shadow-outline`}
           id="address"
-          type="address"
+          type="text"
           placeholder="Address"
           {...register("address")}
         />
@@ -127,7 +131,7 @@ export const CreateShopForm = () => {
               errors.latitude && "border-red-500"
             } rounded appearance-none focus:outline-none focus:shadow-outline`}
             id="latitude"
-            type="latitude"
+            type="text"
             placeholder="76.9494540764531"
             {...register("latitude")}
           />
@@ -149,7 +153,7 @@ export const CreateShopForm = () => {
               errors.longitude && "border-red-500"
             } rounded appearance-none focus:outline-none focus:shadow-outline`}
             id="longitude"
-            type="longitude"
+            type="text"
             placeholder="10.0154517675376"
             {...register("longitude")}
           />
@@ -187,7 +191,7 @@ export const CreateShop = ({ toggle }: CreateShopProps) => {
               X
             </div>
           </div>
-          <CreateShopForm />
+          <CreateShopForm toggle={toggle} />
         </div>
       </div>
       <Toaster />

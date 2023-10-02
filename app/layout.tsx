@@ -3,8 +3,7 @@ import "./globals.css";
 
 import Providers from "@/utils/provider";
 import React from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { getCurrentUser } from "@/utils";
 
 export const metadata = {
   title: "Inventory management",
@@ -16,24 +15,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const getCurrentUser = async () => {
-    try {
-      const session = await getServerSession(authOptions);
-      if (!session?.user?.email) return;
-      const currentUser = await prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-
-      if (!currentUser) return;
-
-      return currentUser;
-    } catch (e: any) {
-      console.log(e);
-      // simply ignores if no user is logged in
-      return;
-    }
-  };
-
   const user = await getCurrentUser();
 
   return (
