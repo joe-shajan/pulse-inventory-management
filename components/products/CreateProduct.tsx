@@ -13,13 +13,23 @@ const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
   description: z.string().min(1, { message: "description is required" }),
   price: z.string().min(1, { message: "price is required" }),
-  tags: z.string().min(1, { message: "tags is required" }),
+  tags: z.string().min(1, { message: "tags required" }),
   stock: z.string().min(1, { message: "stock is required" }),
 });
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export const CreateProductForm = () => {
+type CreateProductFormProps = {
+  shopId: string;
+  refetch: () => void;
+  toggle: () => void;
+};
+
+export const CreateProductForm = ({
+  shopId,
+  refetch,
+  toggle,
+}: CreateProductFormProps) => {
   const {
     register,
     handleSubmit,
@@ -31,13 +41,15 @@ export const CreateProductForm = () => {
 
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
-      return axios.post("/api/auth/signup", data);
+      return axios.post(`/api/shop/${shopId}/product`, data);
     },
     onSuccess: () => {
-      toast.success("Signup successfull");
+      refetch();
+      toggle();
+      toast.success("Product added successfully");
     },
     onError: () => {
-      toast.error("Signup failed");
+      toast.error("Could not add product");
     },
   });
 
@@ -161,7 +173,7 @@ export const CreateProductForm = () => {
       </div>
       <div className="text-center">
         <Button className="w-full " type="submit">
-          Add Product
+          {mutation.isLoading ? "Adding Product..." : "Add Product"}
         </Button>
       </div>
     </form>
@@ -170,9 +182,15 @@ export const CreateProductForm = () => {
 
 type CreateProductProps = {
   toggle: () => void;
+  refetch: () => void;
+  shopId: string;
 };
 
-export const CreateProduct = ({ toggle }: CreateProductProps) => {
+export const CreateProduct = ({
+  toggle,
+  shopId,
+  refetch,
+}: CreateProductProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -186,7 +204,11 @@ export const CreateProduct = ({ toggle }: CreateProductProps) => {
               X
             </div>
           </div>
-          <CreateProductForm />
+          <CreateProductForm
+            shopId={shopId}
+            refetch={refetch}
+            toggle={toggle}
+          />
         </div>
       </div>
       <Toaster />

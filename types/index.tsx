@@ -1,6 +1,6 @@
-import type { Shop, User, TeamMember } from "@prisma/client";
+import type { Shop, User, TeamMember, Product } from "@prisma/client";
 
-export { Shop, User, TeamMember };
+export { Shop, User, TeamMember, Product };
 
 export type UserRoles = "ADMIN" | "MANAGER";
 
@@ -9,5 +9,5 @@ export type TeamMemberWithUser = {
   userId: string;
   user: User;
   shopId: string;
-  role: UserRoles; // Assuming you have defined the UserRoles enum
+  role: UserRoles;
 };

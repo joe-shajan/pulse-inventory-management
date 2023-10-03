@@ -35,14 +35,14 @@ model Shop {
 }
 
 model Product {
-  id             String   @id @default(cuid())
-  name           String
-  description    String
-  price          Float
-  tags           String[]
-  availableStock String
-  shopId         String
-  shop           Shop     @relation(fields: [shopId], references: [id])
+  id          String @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  tags        String
+  stock       String
+  shopId      String
+  shop        Shop   @relation(fields: [shopId], references: [id])
 }
 
 enum UserRoles {
