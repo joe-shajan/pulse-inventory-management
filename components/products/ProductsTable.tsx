@@ -1,11 +1,36 @@
 import React from "react";
-import { Product } from "@/types";
+import { Product, UserRoles } from "@/types";
+import toast, { Toaster } from "react-hot-toast";
+import { signIn } from "next-auth/react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 type ProductsTableProps = {
   products: Product[];
+  userRole: UserRoles;
+  shopId: string;
+  refetch: () => void;
 };
 
-const ProductsTable = ({ products }: ProductsTableProps) => {
+const ProductsTable = ({
+  products,
+  userRole,
+  shopId,
+  refetch,
+}: ProductsTableProps) => {
+  const mutation = useMutation({
+    mutationFn: (productId: string) => {
+      return axios.delete(`/api/shop/${shopId}/product/${productId}`);
+    },
+    onSuccess: () => {
+      refetch();
+      toast.success("product deleted successfully");
+    },
+    onError: () => {
+      toast.error("product deletion failed");
+    },
+  });
+
   return (
     <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
       <table className="w-full flex flex-row r flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
@@ -40,13 +65,23 @@ const ProductsTable = ({ products }: ProductsTableProps) => {
               <td className="p-3 truncate">{product.tags}</td>
               <td className="p-3 truncate">{product.stock}</td>
               <td className="flex gap-3 p-3">
-                <span className="text-blue-500 hover:text-blue-600">Edit</span>
-                <span className="text-red-500 hover:text-red-600">Delete</span>
+                <span className="text-blue-500 hover:text-blue-600 cursor-pointer">
+                  Edit
+                </span>
+                {userRole === "ADMIN" ? (
+                  <span
+                    onClick={() => mutation.mutate(product.id)}
+                    className="text-red-500 hover:text-red-600 cursor-pointer"
+                  >
+                    Delete
+                  </span>
+                ) : null}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Toaster />
     </div>
   );
 };

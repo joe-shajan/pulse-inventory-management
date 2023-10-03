@@ -29,6 +29,10 @@ export default function Page({ params }: any) {
     queryFn: () => getUserRole(id),
   });
 
+  if (error) {
+    return <div>could not fetch products</div>;
+  }
+
   return (
     <>
       {userRole === "ADMIN" ? (
@@ -51,9 +55,18 @@ export default function Page({ params }: any) {
         <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
           loading Products...
         </div>
-      ) : products ? (
-        <ProductsTable products={products} />
-      ) : null}
+      ) : products?.length ? (
+        <ProductsTable
+          shopId={id}
+          products={products}
+          userRole={userRole || "MANAGER"}
+          refetch={refetch}
+        />
+      ) : (
+        <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
+          Products not found add new
+        </div>
+      )}
     </>
   );
 }
