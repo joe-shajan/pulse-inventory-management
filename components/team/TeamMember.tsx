@@ -18,7 +18,11 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export const AddTeamMemberForm = () => {
+type AddTeamMemberFormType = {
+  shopId: string;
+};
+
+export const AddTeamMemberForm = ({ shopId }: AddTeamMemberFormType) => {
   const {
     register,
     handleSubmit,
@@ -30,7 +34,7 @@ export const AddTeamMemberForm = () => {
 
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
-      return axios.post("/api/auth/signup", data);
+      return axios.post(`/api/shop/${shopId}/team`, data);
     },
     onSuccess: () => {
       toast.success("Signup successfull");
@@ -74,15 +78,17 @@ export const AddTeamMemberForm = () => {
         >
           Role
         </label>
-        <input
+        <select
           className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
             errors.role && "border-red-500"
           } rounded appearance-none focus:outline-none focus:shadow-outline`}
           id="role"
-          type="text"
-          placeholder="Role"
           {...register("role")}
-        />
+          defaultValue="MANAGER" // Set "MANAGER" as the default value
+        >
+          <option value="ADMIN">ADMIN</option>
+          <option value="MANAGER">MANAGER</option>
+        </select>
         {errors.role && (
           <p className="text-xs italic text-red-500 mt-2">
             {errors.role?.message}
@@ -101,9 +107,10 @@ export const AddTeamMemberForm = () => {
 
 type AddTeamMemberProps = {
   toggle: () => void;
+  shopId: string;
 };
 
-export const AddTeamMember = ({ toggle }: AddTeamMemberProps) => {
+export const AddTeamMember = ({ toggle, shopId }: AddTeamMemberProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -117,7 +124,7 @@ export const AddTeamMember = ({ toggle }: AddTeamMemberProps) => {
               X
             </div>
           </div>
-          <AddTeamMemberForm />
+          <AddTeamMemberForm shopId={shopId} />
         </div>
       </div>
       <Toaster />

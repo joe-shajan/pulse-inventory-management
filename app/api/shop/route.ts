@@ -14,13 +14,13 @@ export async function POST(request: Request) {
       data: {
         ...shopData,
         owner: {
-          connect: { id: user?.id }, // Connect the shop to the user as the owner
+          connect: { id: user?.id },
         },
         managers: {
           create: [
             {
               userId: user?.id,
-              role: "ADMIN", // Set the user as an ADMIN for this shop
+              role: "ADMIN",
             },
           ],
         },
@@ -49,14 +49,26 @@ export async function GET(request: Request) {
 
     if (!user) throw new Error("User not found");
 
-    // Use Prisma to query shops associated with the user
     const shops = await prisma.shop.findMany({
       where: {
         ownerId: user.id,
       },
     });
 
-    return NextResponse.json({ shops });
+    const shopsWhereUserIsMember = await prisma.shop.findMany({
+      where: {
+        NOT: {
+          ownerId: user.id, // Exclude shops where the user is the owner
+        },
+        managers: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json({ shops: [...shops, ...shopsWhereUserIsMember] });
   } catch (error: any) {
     console.log(error);
 

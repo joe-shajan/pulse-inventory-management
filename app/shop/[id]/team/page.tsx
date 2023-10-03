@@ -38,7 +38,7 @@ export default function Page({ params }: any) {
       {userRole === "ADMIN" ? (
         <>
           <Modal isOpen={isOpen} toggle={toggle}>
-            <AddTeamMember toggle={toggle} />
+            <AddTeamMember toggle={toggle} shopId={id} />
           </Modal>
           <div className="flex gap-3 justify-end px-4 md:px-12 lg:px-28 mt-6 mb-2">
             <Button onClick={toggle}>Add team member</Button>
