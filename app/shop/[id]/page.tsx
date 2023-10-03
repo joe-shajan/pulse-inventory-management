@@ -51,6 +51,7 @@ export default function Page({ params }: any) {
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
         <CreateProduct
+          userRole={userRole || "MANAGER"}
           toggle={toggle}
           shopId={id}
           refetch={refetch}

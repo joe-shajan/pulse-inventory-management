@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
-import { Product } from "@/types";
+import { Product, UserRoles } from "@/types";
 import { useEffect } from "react";
 
 const validationSchema = z.object({
@@ -26,6 +26,7 @@ type CreateProductFormProps = {
   toggle: () => void;
   setEditingProduct: (product: Product | null) => void;
   editingProduct: Product | null;
+  userRole: UserRoles;
 };
 
 export const CreateProductForm = ({
@@ -34,7 +35,14 @@ export const CreateProductForm = ({
   toggle,
   editingProduct,
   setEditingProduct,
+  userRole,
 }: CreateProductFormProps) => {
+  const canUserEdit = editingProduct
+    ? userRole === "ADMIN"
+      ? true
+      : false
+    : true;
+
   const {
     register,
     handleSubmit,
@@ -112,6 +120,7 @@ export const CreateProductForm = ({
           id="name"
           type="text"
           placeholder="Name"
+          disabled={!canUserEdit}
           {...register("name")}
         />
         {errors.name && (
@@ -134,6 +143,7 @@ export const CreateProductForm = ({
           id="description"
           type="text"
           placeholder="Description"
+          disabled={!canUserEdit}
           {...register("description")}
         />
         {errors.description && (
@@ -157,6 +167,7 @@ export const CreateProductForm = ({
           id="price"
           type="price"
           placeholder="Price"
+          disabled={!canUserEdit}
           {...register("price")}
         />
         {errors.price && (
@@ -180,6 +191,7 @@ export const CreateProductForm = ({
             id="tags"
             type="tags"
             placeholder="red, glossy, fast charging"
+            disabled={!canUserEdit}
             {...register("tags")}
           />
           {errors.tags && (
@@ -232,6 +244,7 @@ type CreateProductProps = {
   setEditingProduct: (product: Product | null) => void;
   shopId: string;
   editingProduct: Product | null;
+  userRole: UserRoles;
 };
 
 export const CreateProduct = ({
@@ -240,6 +253,7 @@ export const CreateProduct = ({
   refetch,
   editingProduct,
   setEditingProduct,
+  userRole,
 }: CreateProductProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
@@ -258,6 +272,7 @@ export const CreateProduct = ({
             </div>
           </div>
           <CreateProductForm
+            userRole={userRole}
             shopId={shopId}
             refetch={refetch}
             toggle={toggle}
