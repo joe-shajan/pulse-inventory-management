@@ -5,9 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
+import { Product } from "@/types";
+import { useEffect } from "react";
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
@@ -23,17 +24,22 @@ type CreateProductFormProps = {
   shopId: string;
   refetch: () => void;
   toggle: () => void;
+  setEditingProduct: (product: Product | null) => void;
+  editingProduct: Product | null;
 };
 
 export const CreateProductForm = ({
   shopId,
   refetch,
   toggle,
+  editingProduct,
+  setEditingProduct,
 }: CreateProductFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ValidationSchema>({
     // @ts-ignore
     resolver: zodResolver(validationSchema),
@@ -53,10 +59,44 @@ export const CreateProductForm = ({
     },
   });
 
+  const editProductMutation = useMutation({
+    mutationFn: (data: ValidationSchema) => {
+      return axios.put(
+        `/api/shop/${shopId}/product/${editingProduct?.id}`,
+        data
+      );
+    },
+    onSuccess: () => {
+      refetch();
+      toggle();
+      setEditingProduct(null);
+      toast.success("Product updated successfully");
+    },
+    onError: () => {
+      toast.error("Could not update product");
+    },
+  });
+
+  useEffect(() => {
+    if (editingProduct) {
+      setValue("name", editingProduct.name);
+      setValue("description", editingProduct.description);
+      setValue("price", editingProduct.price.toString());
+      setValue("tags", editingProduct.tags);
+      setValue("stock", editingProduct.stock);
+    }
+  }, [editingProduct]);
+
   return (
     <form
       className="px-8 pt-6 pb-2 mb-4"
-      onSubmit={handleSubmit((formData) => mutation.mutate(formData))}
+      onSubmit={handleSubmit((formData) => {
+        if (editingProduct) {
+          editProductMutation.mutate(formData);
+        } else {
+          mutation.mutate(formData);
+        }
+      })}
     >
       <div className="mb-4 md:mr-2">
         <label
@@ -173,7 +213,13 @@ export const CreateProductForm = ({
       </div>
       <div className="text-center">
         <Button className="w-full " type="submit">
-          {mutation.isLoading ? "Adding Product..." : "Add Product"}
+          {editingProduct
+            ? editProductMutation.isLoading
+              ? "Updating Product..."
+              : "Update Product"
+            : mutation.isLoading
+            ? "Adding Product..."
+            : "Add Product"}
         </Button>
       </div>
     </form>
@@ -183,13 +229,17 @@ export const CreateProductForm = ({
 type CreateProductProps = {
   toggle: () => void;
   refetch: () => void;
+  setEditingProduct: (product: Product | null) => void;
   shopId: string;
+  editingProduct: Product | null;
 };
 
 export const CreateProduct = ({
   toggle,
   shopId,
   refetch,
+  editingProduct,
+  setEditingProduct,
 }: CreateProductProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
@@ -199,7 +249,10 @@ export const CreateProduct = ({
             <h3 className="text-lg font-semibold">Add new product</h3>
             <div
               className="text-lg cursor-pointer hover:bg-slate-100 p-1 rounded-lg"
-              onClick={toggle}
+              onClick={() => {
+                toggle();
+                setEditingProduct(null);
+              }}
             >
               X
             </div>
@@ -208,6 +261,8 @@ export const CreateProduct = ({
             shopId={shopId}
             refetch={refetch}
             toggle={toggle}
+            editingProduct={editingProduct}
+            setEditingProduct={setEditingProduct}
           />
         </div>
       </div>

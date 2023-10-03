@@ -8,9 +8,17 @@ export default function useModal() {
   const toggle = () => {
     setisOpen(!isOpen);
   };
+  const openModal = () => {
+    setisOpen(true);
+  };
+  const closeModal = () => {
+    setisOpen(false);
+  };
 
   return {
     isOpen,
     toggle,
+    openModal,
+    closeModal,
   };
 }

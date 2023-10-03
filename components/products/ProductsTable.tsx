@@ -1,7 +1,6 @@
 import React from "react";
 import { Product, UserRoles } from "@/types";
 import toast, { Toaster } from "react-hot-toast";
-import { signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -10,6 +9,7 @@ type ProductsTableProps = {
   userRole: UserRoles;
   shopId: string;
   refetch: () => void;
+  setEditingProduct: (product: Product) => void;
 };
 
 const ProductsTable = ({
@@ -17,6 +17,7 @@ const ProductsTable = ({
   userRole,
   shopId,
   refetch,
+  setEditingProduct,
 }: ProductsTableProps) => {
   const mutation = useMutation({
     mutationFn: (productId: string) => {
@@ -65,7 +66,10 @@ const ProductsTable = ({
               <td className="p-3 truncate">{product.tags}</td>
               <td className="p-3 truncate">{product.stock}</td>
               <td className="flex gap-3 p-3">
-                <span className="text-blue-500 hover:text-blue-600 cursor-pointer">
+                <span
+                  className="text-blue-500 hover:text-blue-600 cursor-pointer"
+                  onClick={() => setEditingProduct(product)}
+                >
                   Edit
                 </span>
                 {userRole === "ADMIN" ? (
@@ -73,7 +77,7 @@ const ProductsTable = ({
                     onClick={() => mutation.mutate(product.id)}
                     className="text-red-500 hover:text-red-600 cursor-pointer"
                   >
-                    Delete
+                    {mutation.isLoading ? "Deleting..." : "Delete"}
                   </span>
                 ) : null}
               </td>
