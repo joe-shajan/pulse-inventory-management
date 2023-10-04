@@ -1,14 +1,13 @@
 import React from "react";
 import { Product, UserRoles } from "@/types";
 import toast, { Toaster } from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 type ProductsRowProps = {
   product: Product;
   setEditingProduct: (product: Product) => void;
   shopId: string;
-  refetch: () => void;
   i: number;
   userRole: UserRoles;
 };
@@ -17,16 +16,19 @@ const ProductsRow = ({
   product,
   setEditingProduct,
   shopId,
-  refetch,
   i,
   userRole,
 }: ProductsRowProps) => {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (productId: string) => {
       return axios.delete(`/api/shop/${shopId}/product/${productId}`);
     },
-    onSuccess: () => {
-      refetch();
+    onSuccess: (_, productId) => {
+      queryClient.setQueryData(["products"], (oldData: any) =>
+        oldData.filter((product: any) => product.id !== productId)
+      );
       toast.success("product deleted successfully");
     },
     onError: () => {
@@ -70,7 +72,6 @@ type ProductsTableProps = {
   products: Product[];
   userRole: UserRoles;
   shopId: string;
-  refetch: () => void;
   setEditingProduct: (product: Product) => void;
 };
 

@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function Home() {
   const { isOpen, toggle } = useModal();
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["shops"],
     queryFn: () => getAllShops(),
   });
@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
-        <CreateShop toggle={toggle} refetch={refetch} />
+        <CreateShop toggle={toggle} />
       </Modal>
       <div className="flex justify-end px-4 md:px-12 lg:px-28 mt-6">
         <Button onClick={toggle}>Create New Shop</Button>

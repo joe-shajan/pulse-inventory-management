@@ -39,7 +39,7 @@ export default function Page({ params }: any) {
     } else {
       closeModal();
     }
-  }, [editingTeamMember]);
+  }, [closeModal, editingTeamMember, openModal]);
 
   if (error) {
     return <div>Could not fetch team members</div>;

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
@@ -22,7 +22,6 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 
 type CreateProductFormProps = {
   shopId: string;
-  refetch: () => void;
   toggle: () => void;
   setEditingProduct: (product: Product | null) => void;
   editingProduct: Product | null;
@@ -31,12 +30,13 @@ type CreateProductFormProps = {
 
 export const CreateProductForm = ({
   shopId,
-  refetch,
   toggle,
   editingProduct,
   setEditingProduct,
   userRole,
 }: CreateProductFormProps) => {
+  const queryClient = useQueryClient();
+
   const canUserEdit = editingProduct
     ? userRole === "ADMIN"
       ? true
@@ -57,8 +57,11 @@ export const CreateProductForm = ({
     mutationFn: (data: ValidationSchema) => {
       return axios.post(`/api/shop/${shopId}/product`, data);
     },
-    onSuccess: () => {
-      refetch();
+    onSuccess: ({ data }) => {
+      queryClient.setQueryData(["products"], (oldData: any) => [
+        ...oldData,
+        data.createdProduct,
+      ]);
       toggle();
       toast.success("Product added successfully");
     },
@@ -74,8 +77,14 @@ export const CreateProductForm = ({
         data
       );
     },
-    onSuccess: () => {
-      refetch();
+    onSuccess: ({ data }) => {
+      queryClient.setQueryData(["products"], (oldData: any) => {
+        const filteredData = oldData.filter(
+          (product: any) => product.id !== data.updatedProduct.id
+        );
+
+        return [...filteredData, data.updatedProduct];
+      });
       toggle();
       setEditingProduct(null);
       toast.success("Product updated successfully");
@@ -240,7 +249,6 @@ export const CreateProductForm = ({
 
 type CreateProductProps = {
   toggle: () => void;
-  refetch: () => void;
   setEditingProduct: (product: Product | null) => void;
   shopId: string;
   editingProduct: Product | null;

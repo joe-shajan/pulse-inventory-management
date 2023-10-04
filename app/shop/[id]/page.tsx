@@ -22,7 +22,6 @@ export default function Page({ params }: any) {
     data: products,
     isLoading,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["products"],
     queryFn: () => getProducts(id),
@@ -39,7 +38,7 @@ export default function Page({ params }: any) {
     } else {
       closeModal();
     }
-  }, [editingProduct]);
+  }, [closeModal, editingProduct, openModal]);
 
   if (error) {
     return <div>could not fetch products</div>;
@@ -52,7 +51,6 @@ export default function Page({ params }: any) {
           userRole={userRole || "MANAGER"}
           toggle={toggle}
           shopId={id}
-          refetch={refetch}
           editingProduct={editingProduct}
           setEditingProduct={setEditingProduct}
         />
@@ -77,7 +75,6 @@ export default function Page({ params }: any) {
           shopId={id}
           products={products}
           userRole={userRole || "MANAGER"}
-          refetch={refetch}
           setEditingProduct={setEditingProduct}
         />
       ) : (

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
@@ -20,10 +20,11 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 
 type CreateShopFormProps = {
   toggle: () => void;
-  refetch: () => void;
 };
 
-export const CreateShopForm = ({ toggle, refetch }: CreateShopFormProps) => {
+export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -37,9 +38,12 @@ export const CreateShopForm = ({ toggle, refetch }: CreateShopFormProps) => {
     mutationFn: (data: ValidationSchema) => {
       return axios.post("/api/shop", data);
     },
-    onSuccess: (data) => {
+    onSuccess: ({ data }) => {
       toast.success("Shop created successfully");
-      refetch();
+      queryClient.setQueryData(["shops"], (oldData: any) => [
+        ...oldData,
+        data.createdShop,
+      ]);
       toggle();
     },
     onError: (error) => {
@@ -176,10 +180,9 @@ export const CreateShopForm = ({ toggle, refetch }: CreateShopFormProps) => {
 
 type CreateShopProps = {
   toggle: () => void;
-  refetch: () => void;
 };
 
-export const CreateShop = ({ toggle, refetch }: CreateShopProps) => {
+export const CreateShop = ({ toggle }: CreateShopProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -193,7 +196,7 @@ export const CreateShop = ({ toggle, refetch }: CreateShopProps) => {
               X
             </div>
           </div>
-          <CreateShopForm toggle={toggle} refetch={refetch} />
+          <CreateShopForm toggle={toggle} />
         </div>
       </div>
       <Toaster />
