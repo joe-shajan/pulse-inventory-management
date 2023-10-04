@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { signIn } from "next-auth/react";
@@ -31,14 +31,19 @@ const Form = () => {
     resolver: zodResolver(validationSchema),
   });
 
+  const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
       return signIn("credentials", { redirect: false, ...data });
     },
     onSuccess: () => {
       toast.success("login successfull");
+      router.push("/");
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       toast.error("login failed");
     },
   });
@@ -96,7 +101,7 @@ const Form = () => {
 
       <div className="my-6 text-center">
         <Button className="w-full " type="submit">
-          Login
+          {mutation.isLoading ? "Logging in..." : "Login"}
         </Button>
       </div>
       <hr className="mb-6 border-t" />

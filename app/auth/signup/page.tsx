@@ -7,7 +7,7 @@ import Link from "next/link";
 import { phoneRegex } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 
@@ -42,12 +42,15 @@ const Form = () => {
     resolver: zodResolver(validationSchema),
   });
 
+  const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: (data: ValidationSchema) => {
       return axios.post("/api/auth/signup", data);
     },
     onSuccess: () => {
-      toast.success("Signup successfull");
+      toast.success("Signup successfull now Log in");
+      router.push("/auth/login");
     },
     onError: () => {
       toast.error("Signup failed");
@@ -174,7 +177,7 @@ const Form = () => {
 
       <div className="mb-6 text-center">
         <Button className="w-full " type="submit">
-          Register Account
+          {mutation.isLoading ? "Signing up..." : "Sign up"}
         </Button>
       </div>
       <hr className="mb-6 border-t" />

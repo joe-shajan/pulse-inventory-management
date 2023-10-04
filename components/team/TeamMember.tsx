@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { TeamMemberWithUser, UserRoles } from "@/types";
