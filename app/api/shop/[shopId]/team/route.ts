@@ -62,7 +62,7 @@ export async function POST(request: Request, { params }: paramsType) {
       },
     });
 
-    return NextResponse.json({ newTeamMember });
+    return NextResponse.json({ newTeamMember: { ...newTeamMember, user } });
   } catch (error: any) {
     console.log(error);
 

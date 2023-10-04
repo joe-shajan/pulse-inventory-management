@@ -2,22 +2,41 @@ import React from "react";
 import { TeamMemberWithUser, TeamMember } from "@/types";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UserRowProps = {
   teamMember: TeamMemberWithUser;
   shopId: string;
   i: number;
+  teamMembersLength: number;
 };
 
-const UserRow = ({ teamMember, shopId, i }: UserRowProps) => {
+const UserRow = ({
+  teamMember,
+  teamMembersLength,
+  shopId,
+  i,
+}: UserRowProps) => {
+  const queryClient = useQueryClient();
+
   const { user, role, id } = teamMember;
   const mutation = useMutation({
     mutationFn: (teamMemberId: string) => {
       return axios.delete(`/api/shop/${shopId}/team/${teamMemberId}`);
     },
-    onSuccess: () => {
-      // refetch();
+    onSuccess: (data, variable) => {
+      queryClient.setQueryData(
+        ["team"],
+        (oldData: TeamMemberWithUser[] | undefined) => {
+          console.log(oldData);
+
+          if (!oldData) return;
+
+          return oldData.filter(
+            (data: TeamMemberWithUser) => data.id !== variable
+          );
+        }
+      );
       toast.success("User removed successfully");
     },
     onError: () => {
@@ -38,7 +57,13 @@ const UserRow = ({ teamMember, shopId, i }: UserRowProps) => {
         <span className="text-blue-500 hover:text-blue-600">Edit</span>
         <span
           className="text-red-500 hover:text-red-600 cursor-pointer"
-          onClick={() => mutation.mutate(id)}
+          onClick={() => {
+            if (teamMembersLength < 2) {
+              toast.error("There must be atleat one team member");
+            } else {
+              mutation.mutate(id);
+            }
+          }}
         >
           {mutation.isLoading ? "Removing..." : "Remove"}
         </span>
@@ -78,6 +103,7 @@ const UsersTable = ({ teamMembers, shopId }: UsersTableProps) => {
               teamMember={teamMember}
               shopId={shopId}
               i={i}
+              teamMembersLength={teamMembers.length}
             />
           ))}
         </tbody>

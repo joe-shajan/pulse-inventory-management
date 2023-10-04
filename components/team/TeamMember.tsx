@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -20,9 +20,15 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 
 type AddTeamMemberFormType = {
   shopId: string;
+  toggle: () => void;
 };
 
-export const AddTeamMemberForm = ({ shopId }: AddTeamMemberFormType) => {
+export const AddTeamMemberForm = ({
+  shopId,
+  toggle,
+}: AddTeamMemberFormType) => {
+  const queryClient = useQueryClient();
+
   const {
     register,
     handleSubmit,
@@ -36,11 +42,17 @@ export const AddTeamMemberForm = ({ shopId }: AddTeamMemberFormType) => {
     mutationFn: (data: ValidationSchema) => {
       return axios.post(`/api/shop/${shopId}/team`, data);
     },
-    onSuccess: () => {
-      toast.success("Signup successfull");
+    onSuccess: ({ data }) => {
+      queryClient.setQueryData(["team"], (oldData: any) => [
+        ...oldData,
+        data.newTeamMember,
+      ]);
+
+      toggle();
+      toast.success("Team member added successfully");
     },
     onError: () => {
-      toast.error("Signup failed");
+      toast.error("Adding team member failed");
     },
   });
 
@@ -124,7 +136,7 @@ export const AddTeamMember = ({ toggle, shopId }: AddTeamMemberProps) => {
               X
             </div>
           </div>
-          <AddTeamMemberForm shopId={shopId} />
+          <AddTeamMemberForm shopId={shopId} toggle={toggle} />
         </div>
       </div>
       <Toaster />
