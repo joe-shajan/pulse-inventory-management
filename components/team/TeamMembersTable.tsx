@@ -1,11 +1,28 @@
 import React from "react";
 import { TeamMemberWithUser } from "@/types";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 
 type UsersTableProps = {
   teamMembers: TeamMemberWithUser[];
+  shopId: string;
 };
 
-const UsersTable = ({ teamMembers }: UsersTableProps) => {
+const UsersTable = ({ teamMembers, shopId }: UsersTableProps) => {
+  const mutation = useMutation({
+    mutationFn: (teamMemberId: string) => {
+      return axios.delete(`/api/shop/${shopId}/team/${teamMemberId}`);
+    },
+    onSuccess: () => {
+      // refetch();
+      toast.success("User removed successfully");
+    },
+    onError: () => {
+      toast.error("Removing user failed");
+    },
+  });
+
   return (
     <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
       <table className="w-full flex flex-row r flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
@@ -36,12 +53,18 @@ const UsersTable = ({ teamMembers }: UsersTableProps) => {
               <td className="p-3 truncate">{role}</td>
               <td className="flex gap-3 p-3">
                 <span className="text-blue-500 hover:text-blue-600">Edit</span>
-                <span className="text-red-500 hover:text-red-600">Remove</span>
+                <span
+                  className="text-red-500 hover:text-red-600 cursor-pointer"
+                  onClick={() => mutation.mutate(id)}
+                >
+                  {mutation.isLoading ? "Removing..." : "Remove"}
+                </span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Toaster />
     </div>
   );
 };

@@ -51,7 +51,7 @@ export default function Page({ params }: any) {
           loading team members...
         </div>
       ) : teamMembers ? (
-        <UsersTable teamMembers={teamMembers} />
+        <UsersTable teamMembers={teamMembers} shopId={id} />
       ) : null}
     </>
   );
