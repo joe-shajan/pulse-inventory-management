@@ -4,21 +4,23 @@ import toast, { Toaster } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-type ProductsTableProps = {
-  products: Product[];
-  userRole: UserRoles;
+type ProductsRowProps = {
+  product: Product;
+  setEditingProduct: (product: Product) => void;
   shopId: string;
   refetch: () => void;
-  setEditingProduct: (product: Product) => void;
+  i: number;
+  userRole: UserRoles;
 };
 
-const ProductsTable = ({
-  products,
-  userRole,
+const ProductsRow = ({
+  product,
+  setEditingProduct,
   shopId,
   refetch,
-  setEditingProduct,
-}: ProductsTableProps) => {
+  i,
+  userRole,
+}: ProductsRowProps) => {
   const mutation = useMutation({
     mutationFn: (productId: string) => {
       return axios.delete(`/api/shop/${shopId}/product/${productId}`);
@@ -32,6 +34,47 @@ const ProductsTable = ({
     },
   });
 
+  return (
+    <tr
+      key={product.id}
+      className={`flex rounded-lg rounded-s-none flex-col flex-no wrap sm:table-row mb-2 border-grey-light md:border-b border border-l-0 sm:mb-0 hover:bg-slate-100 ${
+        i % 2 === 0 ? "bg-slate-50" : ""
+      }`}
+    >
+      <td className="p-3">{product.name}</td>
+      <td className="p-3 truncate">{product.description}</td>
+      <td className="p-3 truncate">Rs. {product.price}</td>
+      <td className="p-3 truncate">{product.tags}</td>
+      <td className="p-3 truncate">{product.stock}</td>
+      <td className="flex gap-3 p-3">
+        <span
+          className="text-blue-500 hover:text-blue-600 cursor-pointer"
+          onClick={() => setEditingProduct(product)}
+        >
+          Edit
+        </span>
+        {userRole === "ADMIN" ? (
+          <span
+            onClick={() => mutation.mutate(product.id)}
+            className="text-red-500 hover:text-red-600 cursor-pointer"
+          >
+            {mutation.isLoading ? "Deleting..." : "Delete"}
+          </span>
+        ) : null}
+      </td>
+    </tr>
+  );
+};
+
+type ProductsTableProps = {
+  products: Product[];
+  userRole: UserRoles;
+  shopId: string;
+  refetch: () => void;
+  setEditingProduct: (product: Product) => void;
+};
+
+const ProductsTable = ({ products, ...props }: ProductsTableProps) => {
   return (
     <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
       <table className="w-full flex flex-row r flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
@@ -54,34 +97,7 @@ const ProductsTable = ({
         </thead>
         <tbody className="flex-1 sm:flex-none border-grey-light md:border-0 borde">
           {products.map((product, i) => (
-            <tr
-              key={product.id}
-              className={`flex rounded-lg rounded-s-none flex-col flex-no wrap sm:table-row mb-2 border-grey-light md:border-b border border-l-0 sm:mb-0 hover:bg-slate-100 ${
-                i % 2 === 0 ? "bg-slate-50" : ""
-              }`}
-            >
-              <td className="p-3">{product.name}</td>
-              <td className="p-3 truncate">{product.description}</td>
-              <td className="p-3 truncate">Rs. {product.price}</td>
-              <td className="p-3 truncate">{product.tags}</td>
-              <td className="p-3 truncate">{product.stock}</td>
-              <td className="flex gap-3 p-3">
-                <span
-                  className="text-blue-500 hover:text-blue-600 cursor-pointer"
-                  onClick={() => setEditingProduct(product)}
-                >
-                  Edit
-                </span>
-                {userRole === "ADMIN" ? (
-                  <span
-                    onClick={() => mutation.mutate(product.id)}
-                    className="text-red-500 hover:text-red-600 cursor-pointer"
-                  >
-                    {mutation.isLoading ? "Deleting..." : "Delete"}
-                  </span>
-                ) : null}
-              </td>
-            </tr>
+            <ProductsRow key={product.id} product={product} {...props} i={i} />
           ))}
         </tbody>
       </table>
