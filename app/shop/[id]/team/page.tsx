@@ -9,16 +9,20 @@ import { AddTeamMember } from "@/components/team/TeamMember";
 import { useQuery } from "@tanstack/react-query";
 import { getTeamMembers } from "@/services/TeamsServices";
 import { getUserRole } from "@/services";
+import { useEffect, useState } from "react";
+import { TeamMemberWithUser } from "@/types";
 
 export default function Page({ params }: any) {
   const { id } = params;
-  const { isOpen, toggle } = useModal();
+  const { isOpen, toggle, openModal, closeModal } = useModal();
+
+  const [editingTeamMember, setEditingTeamMember] =
+    useState<TeamMemberWithUser | null>(null);
 
   const {
     data: teamMembers,
     isLoading,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["team"],
     queryFn: () => getTeamMembers(id),
@@ -29,6 +33,14 @@ export default function Page({ params }: any) {
     queryFn: () => getUserRole(id),
   });
 
+  useEffect(() => {
+    if (editingTeamMember) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [editingTeamMember]);
+
   if (error) {
     return <div>Could not fetch team members</div>;
   }
@@ -38,7 +50,13 @@ export default function Page({ params }: any) {
       {userRole === "ADMIN" ? (
         <>
           <Modal isOpen={isOpen} toggle={toggle}>
-            <AddTeamMember toggle={toggle} shopId={id} />
+            <AddTeamMember
+              userRole={userRole || "MANAGER"}
+              toggle={toggle}
+              shopId={id}
+              editingTeamMember={editingTeamMember}
+              setEditingTeamMember={setEditingTeamMember}
+            />
           </Modal>
           <div className="flex gap-3 justify-end px-4 md:px-12 lg:px-28 mt-6 mb-2">
             <Button onClick={toggle}>Add team member</Button>
@@ -51,7 +69,11 @@ export default function Page({ params }: any) {
           loading team members...
         </div>
       ) : teamMembers ? (
-        <UsersTable teamMembers={teamMembers} shopId={id} />
+        <UsersTable
+          teamMembers={teamMembers}
+          shopId={id}
+          setEditingTeamMember={setEditingTeamMember}
+        />
       ) : null}
     </>
   );

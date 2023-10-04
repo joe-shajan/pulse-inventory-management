@@ -9,6 +9,7 @@ type UserRowProps = {
   shopId: string;
   i: number;
   teamMembersLength: number;
+  setEditingTeamMember: (teamMember: TeamMemberWithUser) => void;
 };
 
 const UserRow = ({
@@ -16,6 +17,7 @@ const UserRow = ({
   teamMembersLength,
   shopId,
   i,
+  setEditingTeamMember,
 }: UserRowProps) => {
   const queryClient = useQueryClient();
 
@@ -54,7 +56,18 @@ const UserRow = ({
       <td className="p-3">{user.email}</td>
       <td className="p-3 truncate">{role}</td>
       <td className="flex gap-3 p-3">
-        <span className="text-blue-500 hover:text-blue-600">Edit</span>
+        <span
+          className="text-blue-500 hover:text-blue-600 cursor-pointer"
+          onClick={() => {
+            if (teamMembersLength < 2) {
+              toast.error("There must be atleat one Admin");
+            } else {
+              setEditingTeamMember(teamMember);
+            }
+          }}
+        >
+          Edit
+        </span>
         <span
           className="text-red-500 hover:text-red-600 cursor-pointer"
           onClick={() => {
@@ -75,9 +88,14 @@ const UserRow = ({
 type UsersTableProps = {
   teamMembers: TeamMemberWithUser[];
   shopId: string;
+  setEditingTeamMember: (teamMember: TeamMemberWithUser) => void;
 };
 
-const UsersTable = ({ teamMembers, shopId }: UsersTableProps) => {
+const UsersTable = ({
+  teamMembers,
+  shopId,
+  setEditingTeamMember,
+}: UsersTableProps) => {
   return (
     <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
       <table className="w-full flex flex-row r flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
@@ -104,6 +122,7 @@ const UsersTable = ({ teamMembers, shopId }: UsersTableProps) => {
               shopId={shopId}
               i={i}
               teamMembersLength={teamMembers.length}
+              setEditingTeamMember={setEditingTeamMember}
             />
           ))}
         </tbody>

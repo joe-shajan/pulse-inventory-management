@@ -249,11 +249,8 @@ type CreateProductProps = {
 
 export const CreateProduct = ({
   toggle,
-  shopId,
-  refetch,
-  editingProduct,
   setEditingProduct,
-  userRole,
+  ...props
 }: CreateProductProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
@@ -272,12 +269,9 @@ export const CreateProduct = ({
             </div>
           </div>
           <CreateProductForm
-            userRole={userRole}
-            shopId={shopId}
-            refetch={refetch}
             toggle={toggle}
-            editingProduct={editingProduct}
             setEditingProduct={setEditingProduct}
+            {...props}
           />
         </div>
       </div>

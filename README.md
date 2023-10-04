@@ -68,7 +68,7 @@ npx prisma db push
 
 4. **User Roles:**
    - [x] Implement user roles: Admin and Manager.
-   - [ ] Admin should have the ability to add and remove team members (Managers).
+   - [x] Admin should have the ability to add, edit and remove team members.
    - [x] Only Admins should be able to add more products.
    - [x] Managers cannot add more users or products; they can only change the available stock of products.
 

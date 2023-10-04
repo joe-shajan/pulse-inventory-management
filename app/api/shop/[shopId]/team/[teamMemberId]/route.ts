@@ -33,3 +33,37 @@ export async function DELETE(request: Request, { params }: any) {
     );
   }
 }
+
+export async function PUT(request: Request, { params }: any) {
+  try {
+    const { teamMemberId } = params;
+    const body = await request.json();
+
+    const existingTeamMember = await prisma.teamMember.findUnique({
+      where: { id: teamMemberId },
+    });
+
+    if (!existingTeamMember) {
+      throw new Error("Team member not found");
+    }
+
+    const updatedTeamMember = await prisma.teamMember.update({
+      where: { id: teamMemberId },
+      data: {
+        role: body.role,
+      },
+    });
+
+    return NextResponse.json({ updatedTeamMember });
+  } catch (error: any) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error: error.message,
+        errorCode: error.code,
+      },
+      { status: 500 }
+    );
+  }
+}

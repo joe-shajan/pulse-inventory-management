@@ -8,6 +8,8 @@ import axios from "axios";
 import { redirect } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
+import { TeamMemberWithUser, UserRoles } from "@/types";
+import { useEffect } from "react";
 
 const validationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
@@ -19,13 +21,18 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>;
 
 type AddTeamMemberFormType = {
-  shopId: string;
   toggle: () => void;
+  setEditingTeamMember: (product: TeamMemberWithUser | null) => void;
+  shopId: string;
+  editingTeamMember: TeamMemberWithUser | null;
+  userRole: UserRoles;
 };
 
 export const AddTeamMemberForm = ({
   shopId,
   toggle,
+  editingTeamMember,
+  setEditingTeamMember,
 }: AddTeamMemberFormType) => {
   const queryClient = useQueryClient();
 
@@ -33,6 +40,7 @@ export const AddTeamMemberForm = ({
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ValidationSchema>({
     // @ts-ignore
     resolver: zodResolver(validationSchema),
@@ -56,10 +64,50 @@ export const AddTeamMemberForm = ({
     },
   });
 
+  const editTeamMemberMutation = useMutation({
+    mutationFn: (data: ValidationSchema) => {
+      return axios.put(
+        `/api/shop/${shopId}/team/${editingTeamMember?.id}`,
+        data
+      );
+    },
+    onSuccess: ({ data }) => {
+      toggle();
+      setEditingTeamMember(null);
+      queryClient.setQueryData(["team"], (oldData: any) => {
+        return oldData.map((teamMember: any) => {
+          if (teamMember.id === editingTeamMember?.id) {
+            teamMember.role = data.updatedTeamMember.role;
+          }
+          return teamMember;
+        });
+      });
+      toast.success("Team member updated successfully");
+    },
+    onError: (error) => {
+      console.log(error);
+
+      toast.error("Could not update Team member");
+    },
+  });
+
+  useEffect(() => {
+    if (editingTeamMember) {
+      setValue("email", editingTeamMember.user.email);
+      setValue("role", editingTeamMember.role);
+    }
+  }, [editingTeamMember]);
+
   return (
     <form
       className="px-8 pt-6 pb-2 mb-4"
-      onSubmit={handleSubmit((formData) => mutation.mutate(formData))}
+      onSubmit={handleSubmit((formData) => {
+        if (editingTeamMember) {
+          editTeamMemberMutation.mutate(formData);
+        } else {
+          mutation.mutate(formData);
+        }
+      })}
     >
       <div className="mb-4 md:mr-2">
         <label
@@ -75,6 +123,7 @@ export const AddTeamMemberForm = ({
           id="email"
           type="text"
           placeholder="email"
+          disabled={editingTeamMember ? true : false}
           {...register("email")}
         />
         {errors.email && (
@@ -110,7 +159,13 @@ export const AddTeamMemberForm = ({
 
       <div className="text-center">
         <Button className="w-full " type="submit">
-          Add User
+          {editingTeamMember
+            ? editTeamMemberMutation.isLoading
+              ? "Updating Team member..."
+              : "Update Team member"
+            : mutation.isLoading
+            ? "Adding Team member..."
+            : "Add Team member"}
         </Button>
       </div>
     </form>
@@ -119,10 +174,17 @@ export const AddTeamMemberForm = ({
 
 type AddTeamMemberProps = {
   toggle: () => void;
+  setEditingTeamMember: (product: TeamMemberWithUser | null) => void;
   shopId: string;
+  editingTeamMember: TeamMemberWithUser | null;
+  userRole: UserRoles;
 };
 
-export const AddTeamMember = ({ toggle, shopId }: AddTeamMemberProps) => {
+export const AddTeamMember = ({
+  toggle,
+  setEditingTeamMember,
+  ...props
+}: AddTeamMemberProps) => {
   return (
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
@@ -131,12 +193,19 @@ export const AddTeamMember = ({ toggle, shopId }: AddTeamMemberProps) => {
             <h3 className="text-lg font-semibold">Add new User</h3>
             <div
               className="text-lg cursor-pointer hover:bg-slate-100 p-1 rounded-lg"
-              onClick={toggle}
+              onClick={() => {
+                setEditingTeamMember(null);
+                toggle();
+              }}
             >
               X
             </div>
           </div>
-          <AddTeamMemberForm shopId={shopId} toggle={toggle} />
+          <AddTeamMemberForm
+            toggle={toggle}
+            setEditingTeamMember={setEditingTeamMember}
+            {...props}
+          />
         </div>
       </div>
       <Toaster />

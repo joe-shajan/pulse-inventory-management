@@ -41,8 +41,6 @@ export default function Page({ params }: any) {
     }
   }, [editingProduct]);
 
-  useEffect(() => {}, []);
-
   if (error) {
     return <div>could not fetch products</div>;
   }
