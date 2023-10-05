@@ -1,6 +1,7 @@
 // Import necessary modules and initialize Prisma
 
 import { getCurrentUser } from "@/utils";
+import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request, { params }: any) {

@@ -1,3 +1,4 @@
+import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
 type paramsType = {
