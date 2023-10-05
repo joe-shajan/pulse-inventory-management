@@ -17,19 +17,14 @@ export default function Home() {
     queryKey: ["shops"],
     queryFn: () => getAllShops(),
   });
+  console.log(data);
+
+  console.log(error);
 
   if (!session) {
     <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
       Login to view or create shop
     </div>;
-  }
-
-  if (error) {
-    return (
-      <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
-        could not fetch shops Login first
-      </div>
-    );
   }
 
   return (
@@ -42,7 +37,9 @@ export default function Home() {
       </div>
       <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
         <div className="flex flex-wrap -mx-1 lg:-mx-4">
-          {isLoading ? (
+          {error ? (
+            <div>could not fetch shops Login first</div>
+          ) : isLoading ? (
             <div>loading shops...</div>
           ) : (
             data && data.map((shop) => <ShopCard key={shop.id} shop={shop} />)
