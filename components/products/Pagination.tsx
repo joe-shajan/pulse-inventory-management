@@ -18,7 +18,7 @@ const Pagination = (props: Props) => {
         <span className="font-semibold text-gray-900 ">{end}</span>
         of
         <span className="font-semibold text-gray-900 ">{totalProducts}</span>
-        Entries
+        Products
       </span>
       <div className="inline-flex mt-2 xs:mt-0 gap-1">
         <button
