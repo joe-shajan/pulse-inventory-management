@@ -20,7 +20,6 @@ export const authOptions: AuthOptions = {
 
         if (!user) throw new Error("user with that email does not exist");
 
-        // ⚠️ WARNING: DO NOT do this in real-world development
         if (user.password !== credentials?.password)
           throw new Error("incorrect password");
 
@@ -30,7 +29,7 @@ export const authOptions: AuthOptions = {
   ],
   debug: process.env.NODE_ENV === "development",
   session: { strategy: "jwt" },
-  secret: "secret", // store this in a .env file
+  secret: process.env.JWT_SECRET,
 };
 
 const handler = NextAuth(authOptions);

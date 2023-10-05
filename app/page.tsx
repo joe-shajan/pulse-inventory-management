@@ -7,9 +7,12 @@ import ShopCard from "@/components/shop/ShopCard";
 import useModal from "@/hooks/useModal";
 import { getAllShops } from "@/services";
 import { useQuery } from "@tanstack/react-query";
+// import { useSession } from "next-auth/react";
 
 export default function Home() {
   const { isOpen, toggle } = useModal();
+  // const { data: session } = useSession();
+  // console.log(session);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["shops"],
