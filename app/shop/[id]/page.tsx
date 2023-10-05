@@ -76,8 +76,8 @@ export default function Page({ params }: any) {
       ) : null}
 
       {isLoading ? (
-        <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
-          loading Products...
+        <div className="text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+          Loading Products...
         </div>
       ) : data?.products?.length ? (
         <>
@@ -155,8 +155,8 @@ export default function Page({ params }: any) {
           </div>
         </>
       ) : (
-        <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
-          Products not found add new
+        <div className="text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+          There are no products in this shop.
         </div>
       )}
     </>
