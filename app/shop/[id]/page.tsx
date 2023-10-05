@@ -63,11 +63,11 @@ export default function Page({ params }: any) {
           refetch={refetch}
         />
       </Modal>
-      {userRole === "ADMIN" ? (
-        <div className="flex md:flex-row flex-col md:justify-between md:items-center px-4 md:px-12 lg:px-28 mt-6 mb-2">
-          <div className="text-2xl font-semibold text-center md:text-left md:mb-0 mb-6">
-            Products
-          </div>
+      <div className="flex md:flex-row flex-col md:justify-between md:items-center px-4 md:px-12 lg:px-28 mt-6 mb-2">
+        <div className="text-2xl font-semibold text-center md:text-left md:mb-0 mb-6">
+          Products
+        </div>
+        {userRole === "ADMIN" ? (
           <div className="flex gap-3 justify-end">
             <Link href={`/shop/${id}/team`}>
               <Button className="bg-slate-200 text-black hover:bg-slate-300">
@@ -76,8 +76,8 @@ export default function Page({ params }: any) {
             </Link>
             <Button onClick={toggle}>Add New Product</Button>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
       {isLoading ? (
         <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
