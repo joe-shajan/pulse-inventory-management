@@ -58,8 +58,13 @@ export default function Page({ params }: any) {
               setEditingTeamMember={setEditingTeamMember}
             />
           </Modal>
-          <div className="flex gap-3 justify-end px-4 md:px-12 lg:px-28 mt-6 mb-2">
-            <Button onClick={toggle}>Add team member</Button>
+          <div className="flex md:flex-row flex-col md:justify-between md:items-center px-4 md:px-12 lg:px-28 mt-6 mb-2">
+            <div className="text-2xl md:ms-16 font-semibold text-center md:text-left md:mb-0 mb-6">
+              Team Members
+            </div>
+            <div className="flex justify-end">
+              <Button onClick={toggle}>Add team member</Button>
+            </div>
           </div>
         </>
       ) : null}

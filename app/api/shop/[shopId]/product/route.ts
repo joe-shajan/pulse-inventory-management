@@ -43,6 +43,8 @@ export async function POST(request: Request, { params }: any) {
 export async function GET(request: Request, { params }: any) {
   try {
     const { shopId } = params;
+    const { searchParams } = new URL(request.url);
+    const page = searchParams.get("page");
 
     const shop = await prisma.shop.findUnique({
       where: { id: shopId },
@@ -52,13 +54,25 @@ export async function GET(request: Request, { params }: any) {
       throw new Error("Shop not found");
     }
 
-    const products = await prisma.product.findMany({
+    const totalProductsCount = await prisma.product.count({
       where: {
         shopId: shopId,
       },
     });
 
-    return NextResponse.json({ products });
+    const take = 10;
+
+    const skip = page ? +page * take : 1;
+
+    const products = await prisma.product.findMany({
+      where: {
+        shopId: shopId,
+      },
+      take,
+      skip,
+    });
+
+    return NextResponse.json({ products, totalProductsCount });
   } catch (error: any) {
     console.error(error);
 

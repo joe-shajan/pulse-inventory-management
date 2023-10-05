@@ -23,6 +23,7 @@ type ValidationSchema = z.infer<typeof validationSchema>;
 type CreateProductFormProps = {
   shopId: string;
   toggle: () => void;
+  refetch: () => void;
   setEditingProduct: (product: Product | null) => void;
   editingProduct: Product | null;
   userRole: UserRoles;
@@ -31,6 +32,7 @@ type CreateProductFormProps = {
 export const CreateProductForm = ({
   shopId,
   toggle,
+  refetch,
   editingProduct,
   setEditingProduct,
   userRole,
@@ -58,10 +60,12 @@ export const CreateProductForm = ({
       return axios.post(`/api/shop/${shopId}/product`, data);
     },
     onSuccess: ({ data }) => {
-      queryClient.setQueryData(["products"], (oldData: any) => [
-        ...oldData,
-        data.createdProduct,
-      ]);
+      // queryClient.setQueryData(["products"], (oldData: any) => {
+      //   console.log(oldData);
+
+      //   return [...oldData.products, data.createdProduct];
+      // });
+      refetch();
       toggle();
       toast.success("Product added successfully");
     },
@@ -78,18 +82,21 @@ export const CreateProductForm = ({
       );
     },
     onSuccess: ({ data }) => {
-      queryClient.setQueryData(["products"], (oldData: any) => {
-        const filteredData = oldData.filter(
-          (product: any) => product.id !== data.updatedProduct.id
-        );
+      // queryClient.setQueryData(["products"], (oldData: any) => {
+      //   const filteredData = oldData.products.filter(
+      //     (product: any) => product.id !== data.updatedProduct.id
+      //   );
 
-        return [...filteredData, data.updatedProduct];
-      });
+      //   return [...filteredData, data.updatedProduct];
+      // });
       toggle();
+      refetch();
       setEditingProduct(null);
       toast.success("Product updated successfully");
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       toast.error("Could not update product");
     },
   });
@@ -249,6 +256,7 @@ export const CreateProductForm = ({
 
 type CreateProductProps = {
   toggle: () => void;
+  refetch: () => void;
   setEditingProduct: (product: Product | null) => void;
   shopId: string;
   editingProduct: Product | null;
@@ -264,7 +272,7 @@ export const CreateProduct = ({
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
         <div className="w-full lg:w-11/12">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center px-4">
             <h3 className="text-lg font-semibold">Add new product</h3>
             <div
               className="text-lg cursor-pointer hover:bg-slate-100 p-1 rounded-lg"

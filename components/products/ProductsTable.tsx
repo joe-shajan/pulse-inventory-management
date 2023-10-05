@@ -7,6 +7,7 @@ import axios from "axios";
 type ProductsRowProps = {
   product: Product;
   setEditingProduct: (product: Product) => void;
+  refetch: () => void;
   shopId: string;
   i: number;
   userRole: UserRoles;
@@ -18,6 +19,7 @@ const ProductsRow = ({
   shopId,
   i,
   userRole,
+  refetch,
 }: ProductsRowProps) => {
   const queryClient = useQueryClient();
 
@@ -26,9 +28,14 @@ const ProductsRow = ({
       return axios.delete(`/api/shop/${shopId}/product/${productId}`);
     },
     onSuccess: (_, productId) => {
-      queryClient.setQueryData(["products"], (oldData: any) =>
-        oldData.filter((product: any) => product.id !== productId)
-      );
+      // queryClient.setQueryData(["products", 0], (oldData: any) => {
+      //   console.log(oldData);
+
+      //   return oldData.products.filter(
+      //     (product: any) => product.id !== productId
+      //   );
+      // });
+      refetch();
       toast.success("product deleted successfully");
     },
     onError: () => {
@@ -72,19 +79,20 @@ type ProductsTableProps = {
   products: Product[];
   userRole: UserRoles;
   shopId: string;
+  refetch: () => void;
   setEditingProduct: (product: Product) => void;
 };
 
 const ProductsTable = ({ products, ...props }: ProductsTableProps) => {
   return (
-    <div className="container my-2 mx-auto px-4 md:px-12 lg:px-28">
+    <div className="container mt-2 mx-auto px-4 md:px-12 lg:px-28">
       <table className="w-full flex flex-row r flex-no-wrap sm:bg-white rounded-lg overflow-hidden sm:shadow-lg my-5">
         <thead className="text-gray-700 ">
           {Array(products.length)
             .fill(0)
             .map((i) => (
               <tr
-                key={i}
+                key={i + Math.random()}
                 className="bg-slate-100 border-grey-light md:border-0 border border-r-0 flex flex-col flex-no wrap sm:table-row rounded-l-lg sm:rounded-none mb-2 sm:mb-0"
               >
                 <th className="p-3 text-left">Name</th>

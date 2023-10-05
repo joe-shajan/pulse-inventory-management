@@ -188,7 +188,7 @@ export const AddTeamMember = ({
     <div className="max-w-xl mx-auto my-auto py-4 w-full">
       <div className="flex justify-center">
         <div className="w-full lg:w-11/12">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center px-5">
             <h3 className="text-lg font-semibold">Add new User</h3>
             <div
               className="text-lg cursor-pointer hover:bg-slate-100 p-1 rounded-lg"
