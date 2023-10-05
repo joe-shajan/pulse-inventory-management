@@ -55,7 +55,7 @@ const UserRow = ({
     >
       <td className="p-3">{user.email}</td>
       <td className="p-3 truncate">{role}</td>
-      <td className="flex gap-3 p-3">
+      <td className="flex gap-3 p-3 h-[48px] md:h-auto">
         <span
           className="text-blue-500 hover:text-blue-600 cursor-pointer"
           onClick={() => {

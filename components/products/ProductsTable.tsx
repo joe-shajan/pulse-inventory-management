@@ -57,7 +57,7 @@ const ProductsRow = ({
       <td className="p-3 truncate">Rs. {product.price}</td>
       <td className="p-3 truncate">{product.tags}</td>
       <td className="p-3 truncate">{product.stock}</td>
-      <td className="flex gap-3 p-3">
+      <td className="flex gap-3 p-3  h-[48px] md:h-auto">
         <span
           className="text-blue-500 hover:text-blue-600 cursor-pointer"
           onClick={() => setEditingProduct(product)}
