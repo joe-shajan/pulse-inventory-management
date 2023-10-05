@@ -30,8 +30,6 @@ const UserRow = ({
       queryClient.setQueryData(
         ["team"],
         (oldData: TeamMemberWithUser[] | undefined) => {
-          console.log(oldData);
-
           if (!oldData) return;
 
           return oldData.filter(

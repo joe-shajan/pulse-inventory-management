@@ -4,9 +4,9 @@ import "./globals.css";
 import Providers from "@/utils/provider";
 import React from "react";
 import { getCurrentUser } from "@/utils";
-// import Provider from "./context/client-provider";
-// import { getServerSession } from "next-auth";
-// import { authOptions } from "./api/auth/[...nextauth]/route";
+import Provider from "./context/client-provider";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata = {
   title: "Inventory management",
@@ -18,18 +18,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
       <body>
-        {/* <Provider session={session}> */}
-        <Providers>
-          <Header user={user} />
-          {children}
-        </Providers>
-        {/* </Provider> */}
+        <Provider session={session}>
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+        </Provider>
       </body>
     </html>
   );
