@@ -49,6 +49,9 @@ export const pagination = createSlice({
         state.end = action.payload;
       }
       state.totalProducts = action.payload;
+      if (state.end > state.totalProducts) {
+        state.end = state.totalProducts;
+      }
     },
   },
 });
