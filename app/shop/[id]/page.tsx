@@ -25,7 +25,7 @@ export default function Page({ params }: any) {
   const currentPage = useAppSelector((state) => state.paginationReducer);
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: ["products", currentPage.page],
     queryFn: () => getProducts(id, currentPage.page),
   });
@@ -92,7 +92,11 @@ export default function Page({ params }: any) {
             setEditingProduct={setEditingProduct}
             refetch={refetch}
           />
-
+          {isRefetching ? (
+            <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[50px]">
+              <Loader size="xl" />
+            </div>
+          ) : null}
           <Pagination />
         </>
       ) : (
