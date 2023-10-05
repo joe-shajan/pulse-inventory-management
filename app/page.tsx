@@ -1,5 +1,6 @@
 "use client";
 
+import { getInfiniteProducts } from "@/services";
 import { Button } from "@/components";
 import Modal from "@/components/Modal";
 import { CreateShop } from "@/components/shop/CreateShop";
