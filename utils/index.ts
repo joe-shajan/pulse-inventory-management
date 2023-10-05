@@ -3,6 +3,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { User } from "@/types";
 import { getServerSession } from "next-auth";
+import prisma from "./prisma";
 
 export const getCurrentUser = async (): Promise<User | null> => {
   try {

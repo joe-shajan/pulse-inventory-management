@@ -21,31 +21,34 @@ export default function Home() {
 
   console.log(error);
 
-  if (!session) {
-    <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
-      Login to view or create shop
-    </div>;
-  }
-
   return (
     <>
-      <Modal isOpen={isOpen} toggle={toggle}>
-        <CreateShop toggle={toggle} />
-      </Modal>
-      <div className="flex justify-end px-4 md:px-12 lg:px-28 mt-6">
-        <Button onClick={toggle}>Create New Shop</Button>
-      </div>
-      <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
-        <div className="flex flex-wrap -mx-1 lg:-mx-4">
-          {error ? (
-            <div>could not fetch shops Login first</div>
-          ) : isLoading ? (
-            <div>loading shops...</div>
-          ) : (
-            data && data.map((shop) => <ShopCard key={shop.id} shop={shop} />)
-          )}
+      {session ? (
+        <>
+          <Modal isOpen={isOpen} toggle={toggle}>
+            <CreateShop toggle={toggle} />
+          </Modal>
+          <div className="flex justify-end px-4 md:px-12 lg:px-28 mt-6">
+            <Button onClick={toggle}>Create New Shop</Button>
+          </div>
+          <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
+            <div className="flex flex-wrap -mx-1 lg:-mx-4">
+              {error ? (
+                <div>could not fetch shops</div>
+              ) : isLoading ? (
+                <div>loading shops...</div>
+              ) : (
+                data &&
+                data.map((shop) => <ShopCard key={shop.id} shop={shop} />)
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
+          Login to continue
         </div>
-      </div>
+      )}
     </>
   );
 }
