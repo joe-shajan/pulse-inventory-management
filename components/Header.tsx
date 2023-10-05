@@ -1,15 +1,13 @@
 "use client";
-import { User } from "@/types";
 import React from "react";
 import { Button } from "./Button";
 
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-type Props = { user: User | null };
-
-const Header = ({ user }: Props) => {
+const Header = () => {
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   const isSignupOrLogin =
@@ -24,11 +22,8 @@ const Header = ({ user }: Props) => {
       </div>
       {isSignupOrLogin ? (
         <div></div>
-      ) : user ? (
-        <>
-          <div>{user?.name}</div>
-          <Button onClick={() => signOut()}>Log out</Button>
-        </>
+      ) : session ? (
+        <Button onClick={() => signOut()}>Log out</Button>
       ) : (
         <Link href="/auth/login">
           <Button>Login</Button>
