@@ -36,7 +36,6 @@ pnpm dev
 
 7. **Security:**
    - [x] Implement secure authentication and authorization mechanisms to protect user accounts and data.
-   - [ ] Ensure password hashing and encryption for user credentials.
 
 8. **User Experience:**
    - [x] Implement error handling and validation for user inputs.
