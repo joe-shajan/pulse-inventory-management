@@ -39,11 +39,11 @@ export default function Home() {
           <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
             <div className="flex flex-wrap -mx-1 lg:-mx-4">
               {error ? (
-                <div className=" text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+                <div className=" text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
                   could not fetch shops
                 </div>
               ) : isLoading ? (
-                <div className=" text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+                <div className=" text-lg  container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
                   Loading shops...
                 </div>
               ) : (
@@ -54,7 +54,7 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
+        <div className=" text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
           Login to continue
         </div>
       )}

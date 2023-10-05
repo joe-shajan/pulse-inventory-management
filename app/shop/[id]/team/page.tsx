@@ -70,7 +70,7 @@ export default function Page({ params }: any) {
       ) : null}
 
       {isLoading ? (
-        <div className="text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+        <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
           loading team members...
         </div>
       ) : teamMembers ? (

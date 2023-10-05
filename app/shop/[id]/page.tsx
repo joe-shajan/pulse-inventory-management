@@ -76,7 +76,7 @@ export default function Page({ params }: any) {
       ) : null}
 
       {isLoading ? (
-        <div className="text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+        <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
           Loading Products...
         </div>
       ) : data?.products?.length ? (
@@ -90,24 +90,25 @@ export default function Page({ params }: any) {
           />
 
           <div className="flex flex-col items-center mb-4">
-            <span className="text-sm text-gray-700 ">
-              Showing{" "}
+            <span className="text-sm text-gray-700 flex gap-1">
+              Showing
               <span className="font-semibold text-gray-900 ">{start} </span>
               to
-              <span className="font-semibold text-gray-900 ">{end} </span> of
+              <span className="font-semibold text-gray-900 ">{end}</span>
+              of
               <span className="font-semibold text-gray-900 ">
                 {data.totalProductsCount}
               </span>
               Entries
             </span>
-            <div className="inline-flex mt-2 xs:mt-0">
+            <div className="inline-flex mt-2 xs:mt-0 gap-1">
               <button
                 onClick={() => {
                   if (page > 0) {
                     setPage((prev) => prev - 1);
                   }
                 }}
-                className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-200 bg-black rounded hover:bg-gray-900 hover:text-white"
               >
                 <svg
                   className="w-3.5 h-3.5 mr-2"
@@ -132,7 +133,7 @@ export default function Page({ params }: any) {
                     setPage((prev) => prev + 1);
                   }
                 }}
-                className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-l border-gray-700 rounded-r hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-200 bg-black rounded hover:bg-gray-900 hover:text-white"
               >
                 Next
                 <svg
@@ -155,7 +156,7 @@ export default function Page({ params }: any) {
           </div>
         </>
       ) : (
-        <div className="text-lg font-semibold container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+        <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
           There are no products in this shop.
         </div>
       )}
