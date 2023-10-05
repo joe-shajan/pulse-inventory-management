@@ -37,7 +37,7 @@ export default function Home() {
             </div>
           </div>
           <div className="container my-4 mx-auto px-4 md:px-12 lg:px-28">
-            <div className="flex flex-wrap -mx-1 lg:-mx-4">
+            <div className="flex flex-wrap -mx-1 lg:-mx-4 gap-3 md:gap-0">
               {error ? (
                 <div className=" text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
                   could not fetch shops

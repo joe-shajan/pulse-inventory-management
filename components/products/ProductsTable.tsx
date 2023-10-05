@@ -46,7 +46,7 @@ const ProductsRow = ({
   return (
     <tr
       key={product.id}
-      className={`flex rounded-lg rounded-s-none flex-col flex-no wrap sm:table-row mb-2 border-grey-light md:border-b border border-l-0 sm:mb-0 hover:bg-slate-100 ${
+      className={`flex rounded-lg rounded-s-none flex-col flex-no wrap sm:table-row mb-2 border-grey-light md:border-b border border-l-0 sm:mb-0 ${
         i % 2 === 0 ? "bg-slate-50" : ""
       }`}
     >
