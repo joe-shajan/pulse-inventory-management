@@ -12,15 +12,24 @@ import { getProducts, getUserRole } from "@/services";
 import { useEffect, useState } from "react";
 import { Product } from "@/types";
 
+import {
+  next,
+  previous,
+  updateTotalProducts,
+} from "@/redux/features/paginationSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 export default function Page({ params }: any) {
   const { id } = params;
   const { isOpen, toggle, openModal, closeModal } = useModal();
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [page, setPage] = useState(0);
+
+  const currentPage = useAppSelector((state) => state.paginationReducer);
+  const dispatch = useAppDispatch();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["products", page],
-    queryFn: () => getProducts(id, page),
+    queryKey: ["products", currentPage.page],
+    queryFn: () => getProducts(id, currentPage.page),
   });
 
   const { data: userRole } = useQuery({
@@ -40,13 +49,10 @@ export default function Page({ params }: any) {
     return <div>could not fetch products</div>;
   }
 
-  const limit = 10;
-  const skip = limit * page;
-  const start = page * limit + 1;
-  let end = (page + 1) * limit;
-  if (data && end > data?.totalProductsCount) {
-    end = data?.totalProductsCount;
+  if (data?.totalProductsCount) {
+    dispatch(updateTotalProducts(data?.totalProductsCount));
   }
+
   return (
     <>
       <Modal isOpen={isOpen} toggle={toggle}>
@@ -92,9 +98,13 @@ export default function Page({ params }: any) {
           <div className="flex flex-col items-center mb-4">
             <span className="text-sm text-gray-700 flex gap-1">
               Showing
-              <span className="font-semibold text-gray-900 ">{start} </span>
+              <span className="font-semibold text-gray-900 ">
+                {currentPage.start}{" "}
+              </span>
               to
-              <span className="font-semibold text-gray-900 ">{end}</span>
+              <span className="font-semibold text-gray-900 ">
+                {currentPage.end}
+              </span>
               of
               <span className="font-semibold text-gray-900 ">
                 {data.totalProductsCount}
@@ -103,11 +113,7 @@ export default function Page({ params }: any) {
             </span>
             <div className="inline-flex mt-2 xs:mt-0 gap-1">
               <button
-                onClick={() => {
-                  if (page > 0) {
-                    setPage((prev) => prev - 1);
-                  }
-                }}
+                onClick={() => dispatch(previous())}
                 className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-200 bg-black rounded hover:bg-gray-900 hover:text-white"
               >
                 <svg
@@ -128,11 +134,7 @@ export default function Page({ params }: any) {
                 Prev
               </button>
               <button
-                onClick={() => {
-                  if (skip + 10 < data.totalProductsCount) {
-                    setPage((prev) => prev + 1);
-                  }
-                }}
+                onClick={() => dispatch(next())}
                 className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-200 bg-black rounded hover:bg-gray-900 hover:text-white"
               >
                 Next
