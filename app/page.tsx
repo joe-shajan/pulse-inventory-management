@@ -44,9 +44,12 @@ export default function Home() {
                 <div className=" text-lg  container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
                   <Loader size="xl" />
                 </div>
-              ) : (
-                data &&
+              ) : data?.length ? (
                 data.map((shop) => <ShopCard key={shop.id} shop={shop} />)
+              ) : (
+                <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
+                  No shops found create new.
+                </div>
               )}
             </div>
           </div>
