@@ -3,6 +3,8 @@ import { Product, UserRoles } from "@/types";
 import toast, { Toaster } from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { Loader } from "../Loader";
 
 type ProductsRowProps = {
   product: Product;
@@ -60,14 +62,14 @@ const ProductsRow = ({
           className="text-blue-500 hover:text-blue-600 cursor-pointer"
           onClick={() => setEditingProduct(product)}
         >
-          Edit
+          <AiOutlineEdit size={22} />
         </span>
         {userRole === "ADMIN" ? (
           <span
             onClick={() => mutation.mutate(product.id)}
             className="text-red-500 hover:text-red-600 cursor-pointer"
           >
-            {mutation.isLoading ? "Deleting..." : "Delete"}
+            {mutation.isLoading ? <Loader /> : <AiOutlineDelete size={22} />}
           </span>
         ) : null}
       </td>

@@ -3,6 +3,8 @@ import { TeamMemberWithUser, TeamMember } from "@/types";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { Loader } from "../Loader";
 
 type UserRowProps = {
   teamMember: TeamMemberWithUser;
@@ -64,7 +66,7 @@ const UserRow = ({
             }
           }}
         >
-          Edit
+          <AiOutlineEdit size={22} />
         </span>
         <span
           className="text-red-500 hover:text-red-600 cursor-pointer"
@@ -76,7 +78,7 @@ const UserRow = ({
             }
           }}
         >
-          {mutation.isLoading ? "Removing..." : "Remove"}
+          {mutation.isLoading ? <Loader /> : <AiOutlineDelete size={22} />}
         </span>
       </td>
     </tr>
