@@ -1,8 +1,8 @@
+"use server";
+
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { User } from "@/types";
 import { getServerSession } from "next-auth";
-
-export * from "./regex";
 
 export const getCurrentUser = async (): Promise<User | null> => {
   try {
