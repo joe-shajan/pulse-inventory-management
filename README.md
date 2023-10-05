@@ -33,6 +33,7 @@ pnpm dev
 
 6. **Data Persistence:**
    - [x] Implement data persistence to ensure user data and added products persist between app sessions.
+   - [x] Implement redux
 
 7. **Security:**
    - [x] Implement secure authentication and authorization mechanisms to protect user accounts and data.
