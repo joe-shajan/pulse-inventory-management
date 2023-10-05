@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { TeamMemberWithUser, UserRoles } from "@/types";
 import { useEffect } from "react";
+import { Loader } from "../Loader";
 
 const validationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
@@ -158,13 +159,17 @@ export const AddTeamMemberForm = ({
 
       <div className="text-center">
         <Button className="w-full " type="submit">
-          {editingTeamMember
-            ? editTeamMemberMutation.isLoading
-              ? "Updating Team member..."
-              : "Update Team member"
-            : mutation.isLoading
-            ? "Adding Team member..."
-            : "Add Team member"}
+          {editingTeamMember ? (
+            editTeamMemberMutation.isLoading ? (
+              <Loader />
+            ) : (
+              "Update Team member"
+            )
+          ) : mutation.isLoading ? (
+            <Loader />
+          ) : (
+            "Add Team member"
+          )}
         </Button>
       </div>
     </form>

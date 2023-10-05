@@ -11,6 +11,7 @@ import { getTeamMembers } from "@/services/TeamsServices";
 import { getUserRole } from "@/services";
 import { useEffect, useState } from "react";
 import { TeamMemberWithUser } from "@/types";
+import { Loader } from "@/components/Loader";
 
 export default function Page({ params }: any) {
   const { id } = params;
@@ -71,7 +72,7 @@ export default function Page({ params }: any) {
 
       {isLoading ? (
         <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
-          loading team members...
+          <Loader size="xl" />
         </div>
       ) : teamMembers ? (
         <UsersTable

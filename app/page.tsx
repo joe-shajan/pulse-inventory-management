@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components";
+import { Loader } from "@/components/Loader";
 import Modal from "@/components/Modal";
 import { CreateShop } from "@/components/shop/CreateShop";
 import ShopCard from "@/components/shop/ShopCard";
@@ -41,7 +42,7 @@ export default function Home() {
                 </div>
               ) : isLoading ? (
                 <div className=" text-lg  container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
-                  Loading shops...
+                  <Loader size="xl" />
                 </div>
               ) : (
                 data &&

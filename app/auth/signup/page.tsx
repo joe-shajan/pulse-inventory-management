@@ -9,6 +9,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
+import { Loader } from "@/components/Loader";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -180,7 +181,7 @@ const Form = () => {
 
       <div className="mb-6 text-center">
         <Button className="w-full " type="submit">
-          {mutation.isLoading ? "Signing up..." : "Sign up"}
+          {mutation.isLoading ? <Loader /> : "Sign up"}
         </Button>
       </div>
       <hr className="mb-6 border-t" />

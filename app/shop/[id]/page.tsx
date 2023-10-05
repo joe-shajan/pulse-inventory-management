@@ -15,6 +15,7 @@ import { Product } from "@/types";
 import { updateTotalProducts } from "@/redux/features/paginationSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import Pagination from "@/components/products/Pagination";
+import { Loader } from "@/components/Loader";
 
 export default function Page({ params }: any) {
   const { id } = params;
@@ -80,7 +81,7 @@ export default function Page({ params }: any) {
 
       {isLoading ? (
         <div className="text-lg container my-2 mx-auto px-4 md:px-12 lg:px-28 flex justify-center items-center h-[400px]">
-          Loading Products...
+          <Loader size="xl" />
         </div>
       ) : data?.products?.length ? (
         <>

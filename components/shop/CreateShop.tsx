@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
+import { Loader } from "../Loader";
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
@@ -171,7 +172,7 @@ export const CreateShopForm = ({ toggle }: CreateShopFormProps) => {
       </div>
       <div className="text-center">
         <Button className="w-full " type="submit">
-          {mutation.isLoading ? "Creating Shop..." : "Create New Shop"}
+          {mutation.isLoading ? <Loader /> : "Create New Shop"}
         </Button>
       </div>
     </form>

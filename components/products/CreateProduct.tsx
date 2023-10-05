@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { Product, UserRoles } from "@/types";
 import { useEffect } from "react";
+import { Loader } from "../Loader";
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
@@ -241,13 +242,17 @@ export const CreateProductForm = ({
       </div>
       <div className="text-center">
         <Button className="w-full " type="submit">
-          {editingProduct
-            ? editProductMutation.isLoading
-              ? "Updating Product..."
-              : "Update Product"
-            : mutation.isLoading
-            ? "Adding Product..."
-            : "Add Product"}
+          {editingProduct ? (
+            editProductMutation.isLoading ? (
+              <Loader />
+            ) : (
+              "Update Product"
+            )
+          ) : mutation.isLoading ? (
+            <Loader />
+          ) : (
+            "Add Product"
+          )}
         </Button>
       </div>
     </form>

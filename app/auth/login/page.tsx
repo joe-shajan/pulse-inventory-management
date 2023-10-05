@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { signIn } from "next-auth/react";
+import { Loader } from "@/components/Loader";
 
 const validationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
@@ -101,7 +102,7 @@ const Form = () => {
 
       <div className="my-6 text-center">
         <Button className="w-full " type="submit">
-          {mutation.isLoading ? "Logging in..." : "Login"}
+          {mutation.isLoading ? <Loader /> : "Login"}
         </Button>
       </div>
       <hr className="mb-6 border-t" />
