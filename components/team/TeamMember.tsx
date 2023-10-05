@@ -10,6 +10,7 @@ import { Button } from "@/components";
 import { TeamMemberWithUser, UserRoles } from "@/types";
 import { useEffect } from "react";
 import { Loader } from "../Loader";
+import { AiOutlineClose } from "react-icons/ai";
 
 const validationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
@@ -202,7 +203,7 @@ export const AddTeamMember = ({
                 toggle();
               }}
             >
-              X
+              <AiOutlineClose />
             </div>
           </div>
           <AddTeamMemberForm

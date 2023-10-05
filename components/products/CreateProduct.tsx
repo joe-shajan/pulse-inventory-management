@@ -10,6 +10,7 @@ import { Button } from "@/components";
 import { Product, UserRoles } from "@/types";
 import { useEffect } from "react";
 import { Loader } from "../Loader";
+import { AiOutlineClose } from "react-icons/ai";
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
@@ -286,7 +287,7 @@ export const CreateProduct = ({
                 setEditingProduct(null);
               }}
             >
-              X
+              <AiOutlineClose />
             </div>
           </div>
           <CreateProductForm

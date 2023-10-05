@@ -8,6 +8,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components";
 import { Loader } from "../Loader";
+import { AiOutlineClose } from "react-icons/ai";
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
@@ -194,7 +195,7 @@ export const CreateShop = ({ toggle }: CreateShopProps) => {
               className="text-lg cursor-pointer hover:bg-slate-100 p-1 rounded-lg"
               onClick={toggle}
             >
-              X
+              <AiOutlineClose />
             </div>
           </div>
           <CreateShopForm toggle={toggle} />
